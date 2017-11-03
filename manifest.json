@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  
+  "name": "Bookmark Opener",
+  "description": "Extends the options for opening bookmarks",
+  "version": "1.0",
+  
+  "permissions": ["bookmarks", "storage"],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  }
+}
