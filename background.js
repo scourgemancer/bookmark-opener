@@ -1,3 +1,5 @@
+/*global document, chrome, setTimeout*/
+/* eslint-env es6 */
 // Saves options to chrome.storage
 function save_options() {
   var color = document.getElementById('color').value;
