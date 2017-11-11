@@ -1,3 +1,10 @@
 body {
   width: 26em;
 }
+
+.accordion-toggle {
+}
+
+.accordion-content {
+  padding-left: 1.1em;
+}
