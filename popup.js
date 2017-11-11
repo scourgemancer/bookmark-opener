@@ -10,31 +10,52 @@ function ready(main) {
   document.addEventListener('DOMContentLoaded', main, false);
 }
 
+function toggle(elem) {
+  elem.style.display = (elem.style.display == 'none') ? 'block' : 'none';
+}
+
 function viewBookmarks() {
   let bookmarks = document.getElementById("bookmarks");
-  chrome.bookmarks.getTree(function displayTree(tree){
-    if (tree.length === 0) {
-      let text = document.createTextNode("No Tabs found");
-      bookmarks.appendChild(text);
-    }
-    else {
-      let bookmarkList = document.createElement('UL');
-      tree.forEach(function displayTree(node){
-        if (node) {
-          if (node.children) {
-            let title = document.createElement('LI');
-            title.append(node.title);
-            bookmarkList.appendChild(title);
-            node.children.forEach(displayTree);
-          } else {
-            let title = document.createElement('LI');
-            title.append(node.title);
-            bookmarkList.appendChild(title);
-          }
+  chrome.bookmarks.getTree(function displayTree(tree) {
+    tree.forEach(function displayNodes(node, index, arr, folder) {
+      folder = folder || bookmarks; //makes it bookmarks if unprovided
+      if (node.children) { //then it's a folder
+        //display the folder title
+        let title = document.createElement('p');
+        title.append('+' + node.title);
+        title.classList.add('accordion-toggle');
+        folder.appendChild(title);
+
+        //creates the div holding the folder's contents
+        let contents = document.createElement('div');
+        contents.classList.add('accordion-content');
+        if (node.children.length === 0) {
+          let text = document.createElement('p');
+          text.append('empty');
+          contents.appendChild(text);
+        } else {
+          node.children.forEach(function recursiveClosure(node, index, arr) {
+            displayNodes(node, index, arr, contents);
+          });
         }
-      });
-      bookmarks.appendChild(bookmarkList);
-    }
+        folder.appendChild(contents);
+        contents.style.display = 'none';
+
+        //Adds accordion functionality
+        title.onclick=function() {toggle(contents);}
+      } else {
+        //it's an actual bookmark
+        let bookmark = document.createElement('span');
+        let icon = document.createElement('div');
+        icon.style.backgroundImage = 'url(chrome://favicon/)' + node.url + ')';
+        icon.classList.add('icon');
+        bookmark.appendChild(icon);
+        let title = document.createElement('p');
+        title.append(node.title);
+        bookmark.appendChild(title);
+        folder.appendChild(bookmark);
+      }
+    });
   });
 }
 
@@ -48,7 +69,7 @@ function clearTabsNum() {
 }
 
 ready(function main() {
-  displayTabsNum(5);  //these are to appease the linter for now
-  clearTabsNum();
+  displayTabsNum(5); //this is to appease the linter for now
+  clearTabsNum();    //this one too
   viewBookmarks();
 });
