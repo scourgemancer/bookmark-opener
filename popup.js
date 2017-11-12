@@ -17,7 +17,14 @@ function toggle(elem) {
 function viewBookmarks() {
   let bookmarks = document.getElementById("bookmarks");
   chrome.bookmarks.getTree(function displayTree(tree) {
-    tree.forEach(function displayNodes(node, index, arr, folder) {
+    tree = tree[0];
+    let bookmarksBar;
+    tree.children.forEach(function findBookmarksBar(bookmarkFolder){
+      if (bookmarkFolder.title == 'Bookmarks bar') {
+        bookmarksBar = bookmarkFolder;
+      }
+    });
+    bookmarksBar.children.forEach(function displayNodes(node, index, arr, folder) {
       folder = folder || bookmarks; //makes it bookmarks if unprovided
       if (node.children) { //then it's a folder
         //display the folder title
