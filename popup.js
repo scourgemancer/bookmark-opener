@@ -28,8 +28,13 @@ function viewBookmarks() {
       folder = folder || bookmarks; //makes it bookmarks if unprovided
       if (node.children) { //then it's a folder
         //display the folder title
-        let title = document.createElement('p');
-        title.append('+' + node.title);
+        let title = document.createElement('span');
+        title.append('+');
+        let icon = document.createElement('img');
+        icon.setAttribute('src', 'icon.png');
+        icon.classList.add('icon');
+        title.append(icon);
+        title.append(node.title);
         title.classList.add('accordion-toggle');
         folder.appendChild(title);
 
@@ -58,9 +63,7 @@ function viewBookmarks() {
         icon.setAttribute('src', 'chrome://favicon/' + node.url);
         icon.classList.add('icon');
         bookmark.appendChild(icon);
-        let title = document.createElement('p');
-        title.append(node.title);
-        bookmark.appendChild(title);
+        bookmark.append(node.title);
         folder.appendChild(bookmark);
       }
     });
