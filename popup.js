@@ -52,9 +52,10 @@ function viewBookmarks() {
         title.onclick=function() {toggle(contents);}
       } else {
         //it's an actual bookmark
-        let bookmark = document.createElement('span');
-        let icon = document.createElement('div');
-        icon.style.backgroundImage = 'url(chrome://favicon/)' + node.url + ')';
+        let bookmark = document.createElement('a');
+        bookmark.setAttribute('href', node.url);
+        let icon = document.createElement('img');
+        icon.setAttribute('src', 'chrome://favicon/' + node.url);
         icon.classList.add('icon');
         bookmark.appendChild(icon);
         let title = document.createElement('p');

@@ -3,8 +3,23 @@ body {
 }
 
 .accordion-toggle {
+  display: block;
 }
 
 .accordion-content {
   padding-left: 1.1em;
+}
+
+a {
+  display: block;
+}
+
+.icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+p {
+  display: inline-block;
 }
