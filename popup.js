@@ -19,24 +19,28 @@ function viewBookmarks() {
   chrome.bookmarks.getTree(function displayTree(tree) {
     tree = tree[0];
     let bookmarksBar;
-    tree.children.forEach(function findBookmarksBar(bookmarkFolder){
+    tree.children.forEach(function findBookmarksBar(bookmarkFolder) {
       if (bookmarkFolder.title == 'Bookmarks bar') {
         bookmarksBar = bookmarkFolder;
       }
     });
-    bookmarksBar.children.forEach(function displayNodes(node, index, arr, folder) {
-      folder = folder || bookmarks; //makes it bookmarks if unprovided
+    bookmarksBar.children.forEach(function displayNodes(node, index, arr, parent) {
+      parent = parent || bookmarks; //makes it bookmarks if unprovided
       if (node.children) { //then it's a folder
         //display the folder title
-        let title = document.createElement('span');
-        title.append('+');
+        let folder = document.createElement('label');
+        let folderInput = document.createElement('input');
+        folderInput.setAttribute('type', 'checkbox');
+        folderInput.classList.add('folder-checkbox');
+        folder.appendChild(folderInput);
+        folder.append('+');
         let icon = document.createElement('img');
         icon.setAttribute('src', 'icon.png');
         icon.classList.add('icon');
-        title.append(icon);
-        title.append(node.title);
-        title.classList.add('accordion-toggle');
-        folder.appendChild(title);
+        folder.append(icon);
+        folder.append(node.title);
+        folder.classList.add('accordion-toggle');
+        parent.appendChild(folder);
 
         //creates the div holding the folder's contents
         let contents = document.createElement('div');
@@ -50,13 +54,18 @@ function viewBookmarks() {
             displayNodes(node, index, arr, contents);
           });
         }
-        folder.appendChild(contents);
+        parent.appendChild(contents);
         contents.style.display = 'none';
 
         //Adds accordion functionality
-        title.onclick=function() {toggle(contents);}
+        folder.onclick=function() {toggle(contents);}
       } else {
         //it's an actual bookmark
+        let bookmarkOption = document.createElement('label');
+        let bookmarkInput = document.createElement('input');
+        bookmarkInput.setAttribute('type', 'checkbox');
+        bookmarkInput.classList.add('bookmark-checkbox');
+        bookmarkOption.appendChild(bookmarkInput);
         let bookmark = document.createElement('a');
         bookmark.setAttribute('href', node.url);
         let icon = document.createElement('img');
@@ -64,7 +73,8 @@ function viewBookmarks() {
         icon.classList.add('icon');
         bookmark.appendChild(icon);
         bookmark.append(node.title);
-        folder.appendChild(bookmark);
+        bookmarkOption.appendChild(bookmark);
+        parent.appendChild(bookmarkOption);
       }
     });
   });
