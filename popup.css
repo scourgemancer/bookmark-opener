@@ -2,15 +2,43 @@ body {
   width: 26em;
 }
 
+<<<<<<< Updated upstream
 .accordion-toggle {
-}
-
-.accordion-content {
-  padding-left: 1.1em;
-}
-
+=======
 label {
   display: block;
+>>>>>>> Stashed changes
+}
+
+.folder-toggle {
+  display: inline-block;
+  user-select: none;
+  padding: 0;
+  margin: 0% 2%;
+}
+
+.rotated {
+  transform: rotate(90deg);
+}
+
+<<<<<<< Updated upstream
+a {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+=======
+.folder-contents {
+  padding-left: 1.1em;
+>>>>>>> Stashed changes
+}
+
+.icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 0% 2% 0% 0.5%;
 }
 
 a {
@@ -19,12 +47,6 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 90%;
-}
-
-.icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
 }
 
 p {
