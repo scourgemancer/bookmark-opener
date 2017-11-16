@@ -9,7 +9,6 @@ label {
 .folder-toggle {
   display: inline-block;
   user-select: none;
-  font-size: 1.5em;
   padding: 0;
   margin: 0% 2%;
 }
