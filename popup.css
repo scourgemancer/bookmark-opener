@@ -2,17 +2,14 @@ body {
   width: 26em;
 }
 
-<<<<<<< Updated upstream
-.accordion-toggle {
-=======
 label {
   display: block;
->>>>>>> Stashed changes
 }
 
 .folder-toggle {
   display: inline-block;
   user-select: none;
+  font-size: 1.5em;
   padding: 0;
   margin: 0% 2%;
 }
@@ -21,17 +18,8 @@ label {
   transform: rotate(90deg);
 }
 
-<<<<<<< Updated upstream
-a {
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 90%;
-=======
 .folder-contents {
   padding-left: 1.1em;
->>>>>>> Stashed changes
 }
 
 .icon {
