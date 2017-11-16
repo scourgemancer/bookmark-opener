@@ -40,7 +40,6 @@ function displayNodes(node, parent) {
 }
 
 function displayFolder(node, parent) {
-  //display the folder title
   let folder = document.createElement('label');
 
   let folderInput = document.createElement('input');
@@ -122,7 +121,7 @@ function clearTabsNum() {
 }
 
 ready(function main() {
-  displayTabsNum(5); //this is to appease the linter for now
+  displayTabsNum(5); //TODO - remove (this is to appease the linter for now)
   clearTabsNum(); //this one too
   viewBookmarks();
 });
