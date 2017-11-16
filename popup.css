@@ -3,7 +3,6 @@ body {
 }
 
 .accordion-toggle {
-  display: block;
 }
 
 .accordion-content {
@@ -17,8 +16,9 @@ label {
 a {
   display: inline-block;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-  width: 80%;
+  max-width: 90%;
 }
 
 .icon {

@@ -29,17 +29,25 @@ function viewBookmarks() {
       if (node.children) { //then it's a folder
         //display the folder title
         let folder = document.createElement('label');
+
         let folderInput = document.createElement('input');
         folderInput.setAttribute('type', 'checkbox');
         folderInput.classList.add('folder-checkbox');
         folder.appendChild(folderInput);
-        folder.append('+');
+
+        let folderToggle = document.createElement('span');
+        folderToggle.classList.add('accordion-toggle');
+        folderToggle.append('+');
+        folder.appendChild(folderToggle);
+
         let icon = document.createElement('img');
         icon.setAttribute('src', 'icon.png');
         icon.classList.add('icon');
         folder.append(icon);
+
         folder.append(node.title);
-        folder.classList.add('accordion-toggle');
+        let folderContainer = document.createElement('div');
+        folderContainer.appendChild(folder);
         parent.appendChild(folder);
 
         //creates the div holding the folder's contents
@@ -58,7 +66,7 @@ function viewBookmarks() {
         contents.style.display = 'none';
 
         //Adds accordion functionality
-        folder.onclick=function() {toggle(contents);}
+        folderToggle.onclick=function() {toggle(contents);}
       } else {
         //it's an actual bookmark
         let bookmarkOption = document.createElement('label');
