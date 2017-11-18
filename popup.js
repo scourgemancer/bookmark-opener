@@ -55,7 +55,7 @@ function displayFolder(node, parent) {
   folder.appendChild(folderInput);
 
   let folderToggle = document.createElement('span');
-  folderToggle.classList.add('folder-toggle');
+  folderToggle.classList.add('folder-arrow');
   folderToggle.classList.add('accordion-toggle');
   folderToggle.append('▶');
   folder.appendChild(folderToggle);
@@ -74,6 +74,7 @@ function displayFolder(node, parent) {
   let icon = document.createElement('img');
   icon.setAttribute('src', 'icon.png');
   icon.classList.add('icon');
+  icon.classList.add('folder-icon');
   folder.append(icon);
 
   folder.append(node.title);
@@ -146,7 +147,7 @@ function makeCheckboxesInteractive() {
 
 /*Finding a parent folder is hard, so update everyone instead*/
 function updateAllFolderCheckboxes(folders, contents) {
-  for (let i = folders.length-1; i >= 0; i--) {
+  for (let i = folders.length - 1; i >= 0; i--) {
     // -- instead of ++ so children are updated before parents
     let checkboxes = contents[i].querySelectorAll('input');
     let checkedNum = contents[i].querySelectorAll('input:checked');

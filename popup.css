@@ -1,14 +1,36 @@
 body {
   width: 26em;
+  background-color: #f0f0f0;
+}
+
+#navbar {
+  top: 0;
+  margin-top: 0.5em;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  max-height: 3em;
+}
+
+#bookmarks {
+  margin-top: 3em;
 }
 
 label {
   display: block;
+  user-select: none;
+  border: 0.1em solid black;
+  border-radius: 0.5em;
+  margin: 0.5em 0;
 }
 
-.folder-toggle {
-  display: inline-block;
+label:hover {
   user-select: none;
+  background-color: lightgray;
+}
+
+.folder-arrow {
+  display: inline-block;
   padding: 0;
   margin: 0% 2%;
 }
