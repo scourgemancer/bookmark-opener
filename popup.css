@@ -5,11 +5,14 @@ body {
 
 #navbar {
   top: 0;
-  margin-top: 0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   overflow: hidden;
   position: fixed;
   width: 100%;
   max-height: 3em;
+  background-color: #f0f0f0;
+  z-index: 1;
 }
 
 #bookmarks {
