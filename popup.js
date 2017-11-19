@@ -46,8 +46,9 @@ function displayNodes(node, parent) {
 
 /*Populates the popup with a folder from the given node*/
 function displayFolder(node, parent) {
-  let folder = document.createElement('label');
+  let folder = document.createElement('div');
   folder.classList.add('folder');
+  parent.appendChild(folder);
 
   let folderInput = document.createElement('input');
   folderInput.setAttribute('type', 'checkbox');
@@ -61,7 +62,7 @@ function displayFolder(node, parent) {
   folder.appendChild(folderToggle);
 
   // animates arrow and adds accordion functionality
-  folderToggle.onclick = function () {
+  folder.onclick = function () {
     if (folderToggle.classList.contains('rotated')) {
       folderToggle.classList.remove('rotated');
     } else {
@@ -75,12 +76,9 @@ function displayFolder(node, parent) {
   icon.setAttribute('src', 'icon.png');
   icon.classList.add('icon');
   icon.classList.add('folder-icon');
-  folder.append(icon);
+  folder.appendChild(icon);
 
   folder.append(node.title);
-  let folderContainer = document.createElement('div');
-  folderContainer.appendChild(folder);
-  parent.appendChild(folder);
 
   // creates the div holding the folder's contents
   let contents = document.createElement('div');
@@ -125,7 +123,7 @@ function displayBookmark(node, parent) {
 
 /*Adds checkbox features to folder and bookmark checkboxes*/
 function makeCheckboxesInteractive() {
-  const folders = document.querySelectorAll('.folder > input');
+  const folders = document.querySelectorAll('.folder-checkbox');
   const contents = document.getElementsByClassName('folder-contents');
 
   // selecting a bookmark changes the parent's checked status
@@ -141,6 +139,7 @@ function makeCheckboxesInteractive() {
         input.checked = folders[i].checked;
       }
       updateAllFolderCheckboxes(folders, contents);
+      toggle(contents[i]);
     }
   }
 }

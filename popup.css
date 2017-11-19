@@ -19,7 +19,7 @@ body {
   margin-top: 3em;
 }
 
-label {
+.folder, .bookmark {
   display: block;
   user-select: none;
   border: 0.1em solid black;
@@ -27,7 +27,7 @@ label {
   margin: 0.5em 0;
 }
 
-label:hover {
+.folder:hover {
   user-select: none;
   background-color: lightgray;
 }
