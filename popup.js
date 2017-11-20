@@ -30,6 +30,7 @@ function viewBookmarks() {
       displayNodes(node);
     }
     makeCheckboxesInteractive();
+    document.getElementById('select/deselect').onclick = selectOrDeselectAll();
   });
 }
 
@@ -145,7 +146,10 @@ function makeCheckboxesInteractive() {
 }
 
 /*Finding a parent folder is hard, so update everyone instead*/
-function updateAllFolderCheckboxes(folders, contents) {
+function updateAllFolderCheckboxes() {
+  const folders = document.querySelectorAll('.folder-checkbox');
+  const contents = document.getElementsByClassName('folder-contents');
+
   for (let i = folders.length - 1; i >= 0; i--) {
     // -- instead of ++ so children are updated before parents
     let checkboxes = contents[i].querySelectorAll('input');
@@ -187,6 +191,20 @@ function clearTabsNum() {
   chrome.browserAction.setBadgeText({
     text: ''
   });
+}
+
+function selectOrDeselectAll() {
+  let total = document.querySelector('.bookmark-checkbox');
+  let checked = document.querySelector('.bookmark-checkbox:checked');
+
+  for (let bookmark in total) {
+    if (checked && checked.length < total.length) {
+      bookmark.checked = true;
+    } else {
+      bookmark.checked = false;
+    }
+  }
+  updateAllFolderCheckboxes();
 }
 
 /*Acts like the main method*/
