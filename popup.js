@@ -30,7 +30,6 @@ function viewBookmarks() {
       displayNodes(node);
     }
     makeCheckboxesInteractive();
-    document.getElementById('select/deselect').onclick = selectOrDeselectAll();
   });
 }
 
@@ -62,17 +61,6 @@ function displayFolder(node, parent) {
   folderToggle.append('▶');
   folder.appendChild(folderToggle);
 
-  // animates arrow and adds accordion functionality
-  folder.onclick = function () {
-    if (folderToggle.classList.contains('rotated')) {
-      folderToggle.classList.remove('rotated');
-    } else {
-      folderToggle.classList.add('rotated');
-    }
-
-    toggle(contents);
-  }
-
   let icon = document.createElement('img');
   icon.setAttribute('src', 'icon.png');
   icon.classList.add('icon');
@@ -96,6 +84,17 @@ function displayFolder(node, parent) {
   }
   parent.appendChild(contents);
   contents.style.display = 'none';
+
+  // animates arrow and adds accordion functionality
+  folder.onclick = function () {
+    if (folderToggle.classList.contains('rotated')) {
+      folderToggle.classList.remove('rotated');
+    } else {
+      folderToggle.classList.add('rotated');
+    }
+
+    toggle(contents);
+  }
 }
 
 /*Populates the popup with a bookmark from the given node*/
@@ -199,20 +198,6 @@ function clearTabsNum() {
   chrome.browserAction.setBadgeText({
     text: ''
   });
-}
-
-function selectOrDeselectAll() {
-  let total = document.querySelector('.bookmark-checkbox');
-  let checked = document.querySelector('.bookmark-checkbox:checked');
-
-  for (let bookmark in total) {
-    if (checked && checked.length < total.length) {
-      bookmark.checked = true;
-    } else {
-      bookmark.checked = false;
-    }
-  }
-  updateAllFolderCheckboxes();
 }
 
 /*Acts like the main method*/

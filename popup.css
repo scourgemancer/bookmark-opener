@@ -15,6 +15,11 @@ body {
   z-index: 1;
 }
 
+#settings-icon {
+  height: 1.5em;
+  width: 1.5em;
+}
+
 #bookmarks {
   margin-top: 3em;
 }
