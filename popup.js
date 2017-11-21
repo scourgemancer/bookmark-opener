@@ -124,7 +124,8 @@ function displayBookmark(node, parent) {
 
 /*Adds checkbox features to folder and bookmark checkboxes*/
 function makeCheckboxesInteractive() {
-  const folders = document.querySelectorAll('.folder-checkbox');
+  const folders = document.getElementsByClassName('folder-checkbox');
+  const folderToggles = document.getElementsByClassName('folder-arrow');
   const contents = document.getElementsByClassName('folder-contents');
 
   // selecting a bookmark changes the parent's checked status
@@ -140,14 +141,21 @@ function makeCheckboxesInteractive() {
         input.checked = folders[i].checked;
       }
       updateAllFolderCheckboxes(folders, contents);
+
+      // this is to undo the effect of clicking on the folder
       toggle(contents[i]);
+      if (folderToggles[i].classList.contains('rotated')) {
+        folderToggles[i].classList.remove('rotated');
+      } else {
+        folderToggles[i].classList.add('rotated');
+      }
     }
   }
 }
 
 /*Finding a parent folder is hard, so update everyone instead*/
 function updateAllFolderCheckboxes() {
-  const folders = document.querySelectorAll('.folder-checkbox');
+  const folders = document.getElementsByClassName('folder-checkbox');
   const contents = document.getElementsByClassName('folder-contents');
 
   for (let i = folders.length - 1; i >= 0; i--) {
