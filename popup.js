@@ -1,4 +1,4 @@
-/*global chrome, document*/
+/*global chrome, document, window*/
 /* eslint-env es6 */
 
 "use strict";
@@ -69,7 +69,7 @@ function displayFolder(node, parent) {
 
   folder.append(node.title);
 
-  // creates the div holding the folder's contents
+  // Creates the div holding the folder's contents
   let contents = document.createElement('div');
   contents.classList.add('folder-contents');
   contents.classList.add('accordion-content');
@@ -85,7 +85,7 @@ function displayFolder(node, parent) {
   parent.appendChild(contents);
   contents.style.display = 'none';
 
-  // animates arrow and adds accordion functionality
+  // Animates arrow and adds accordion functionality
   folder.onclick = function () {
     if (folderToggle.classList.contains('rotated')) {
       folderToggle.classList.remove('rotated');
@@ -127,21 +127,21 @@ function makeCheckboxesInteractive() {
   const folderToggles = document.getElementsByClassName('folder-arrow');
   const contents = document.getElementsByClassName('folder-contents');
 
-  // selecting a bookmark changes the parent's checked status
+  // Selecting a bookmark changes the parent's checked status
   for (let input of document.querySelectorAll('.bookmark-checkbox')) {
     input.onclick = function () {
       updateAllFolderCheckboxes(folders, contents);
     }
   }
   for (let i = 0; i < folders.length; i++) {
-    // selecting a folder toggles selecting all of it's children
+    // Selecting a folder toggles selecting all of it's children
     folders[i].onclick = function () {
       for (let input of contents[i].querySelectorAll('input')) {
         input.checked = folders[i].checked;
       }
       updateAllFolderCheckboxes(folders, contents);
 
-      // this is to undo the effect of clicking on the folder
+      // This is to undo the effect of clicking on the folder
       toggle(contents[i]);
       if (folderToggles[i].classList.contains('rotated')) {
         folderToggles[i].classList.remove('rotated');
@@ -200,7 +200,20 @@ function clearTabsNum() {
   });
 }
 
+function linkOptionsPage() {
+  document.getElementById('settings-icon').onclick = function () {
+    if (chrome.runtime.openOptionsPage) {
+      // New way to open options pages, if supported (Chrome 42+)
+      chrome.runtime.openOptionsPage();
+    } else {
+      // Reasonable fallback
+      window.open(chrome.runtime.getURL('options.html'));
+    }
+  }
+}
+
 /*Acts like the main method*/
 ready(function main() {
   viewBookmarks();
+  linkOptionsPage();
 });
