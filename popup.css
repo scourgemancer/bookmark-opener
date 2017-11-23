@@ -3,6 +3,8 @@ body {
   background-color: #f0f0f0;
 }
 
+
+
 #navbar {
   top: 0;
   padding-top: 0.5em;
@@ -19,6 +21,67 @@ body {
   height: 1.5em;
   width: 1.5em;
 }
+
+.switch {
+  display: inline-block;
+  width: 5em;
+  height: 2em;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: #ca2222;
+  transition: .4s;
+  border-radius: 1em;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1em;
+  width: 1em;
+  left 0.5em;
+  bottom: 0.5em;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2ab934;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(3em);
+}
+
+.slider:after {
+  content: 'OFF';
+  color: white;
+  display: block;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  font-family: Verdana, sans-serif;
+}
+
+input:checked + .slider:after {
+  content: 'ON';
+}
+
+
 
 #bookmarks {
   margin-top: 3em;

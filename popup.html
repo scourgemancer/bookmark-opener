@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="author" content="Timothy Geary">
 
-  <link type="text/css" rel="stylesheet" href="popup.css" />
+  <link type="text/css" rel="stylesheet" href="popup.css"/>
   <script type="text/javascript" src="popup.js"></script>
 </head>
 
@@ -14,8 +14,10 @@
   <div id="navbar">
     <p>Bookmark Opener</p>
     <img id="settings-icon" src="gear.png"/>
-    <button>Start</button>
-    <button>Stop</button>
+    <label class="switch">
+      <input type="checkbox" id="start-button">
+      <div class="slider"></div>
+    </label>
   </div>
   <div id="bookmarks">
     <!--Populates with all of the user's bookmarks-->
