@@ -99,6 +99,10 @@ input:checked + .slider:after {
   margin: 0.5em 0;
 }
 
+.bookmark {
+  border: 0.05em solid black;
+}
+
 .folder:hover {
   user-select: none;
   background-color: lightgray;
