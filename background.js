@@ -3,25 +3,55 @@
 
 "use strict";
 
-/*
-chrome.tabs.onCreated.addListener(function(tab) {
-  let id = tab.id;
-  let deleteme=id*2;
-  id=deleteme;
-});
+var bookmarkQueue = [];
+var openedTabsIds = [];
 
-chrome.tabs.onRemoved.addListener(function(tab) {
-  let id = tab.id;
-  let deleteme=id*2;
-  id=deleteme;
-});
+function enqueueTab(tab) {
+  bookmarkQueue.push(tab);
+}
 
-chrome.tabs.onActivated.addListener(function(tab) {
-  let id = tab.id;
-  let deleteme=id*2;
-  id=deleteme;
-});
-*/
+function dequeueTab() {
+  return bookmarkQueue.shift();
+}
+
+function openTab(newURL) {
+  chrome.tabs.create({ url: newURL }, function addTabId(tab){
+    openedTabsIds.push(tab.id);
+  });
+}
+
+function activatedTabListener(tab) {
+  for (let i = 0; i < openedTabsIds.length; i++) {
+    if (tab.id == openedTabIds[i]) {
+      openedTabsIds.splice(i, 1);
+    }
+    while (openedTabsIds.length < numTabs && bookmarkQueue.length > 0) {
+      openTab( dequeueTab() );
+    }
+  }
+}
+
+function startOpening() {
+  for (let i = 0; i < numTabs && bookmarkQueue.length > 0; i++) {
+    openTab( dequeueTab() );
+  }
+  chrome.tabs.onActivated.addListener(activatedTabListener);
+}
+
+function stopOpening() {
+  chrome.tabs.onActivated.removeListener(activatedTabListener);
+  openedTabsIds = [];
+}
+
+chrome.runtime.onMessage.addListener(
+  function getMessages(request, sender, sendResponse) {
+
+  }
+);
+
+//todo - communicate with the popup to update the bookmarkQueue
+//todo - communicate with the popup to send the bookmarkQueue
+//todo - communicate with the popup to send the length of BookmarkQueue
 
 /*
 EXAMPLE FROM STACKOVERFLOW
