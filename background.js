@@ -49,64 +49,48 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
-//todo - communicate with the popup to update the bookmarkQueue
-//todo - communicate with the popup to send the bookmarkQueue
-//todo - communicate with the popup to send the length of BookmarkQueue
+//todo - communicate with the popup to update the bookmarkQueue (update badge from here)
+//todo - communicate with the popup on opening: to send the bookmarkQueue
 
 /*
 EXAMPLE FROM STACKOVERFLOW
+SIMPLE ONE-TIME REQUEST
 
-// In the extension JS
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { // Fetch the current tab
-  chrome.tabs.sendMessage(tabs[0].id, {message: "preach", preachText: usrMessage});
+chrome.runtime.sendMessage( {message: "preach", preachText: usrMessage} , function(response) {
+  console.log(`message from background: ${JSON.stringify(response)}`);
 });
 
-// In the context script
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.message == "preach"){ // Filter out other messages
-      alert(request.preachText, 5000);
+      console.log(request.preachText);
     }
+    return true; //necessary for async if using sendResponse
 });
 */
 
 /*
-EXAMPLE FROM STACKOVERFLOW
+EXAMPLE FROM CHROME DEVELOPER
+LONG LIVED CONNECTIONS
 
- *BACKGROUND.JS
-
- * onMessage from the extension or tab (a content script)
-
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request.cmd == "any command") {
-      sendResponse({ result: "any response from background" });
-    } else {
-      sendResponse({ result: "error", message: `Invalid 'cmd'` });
-    }
-    // Note: Returning true is required here!
-    //  ref: http://stackoverflow.com/questions/20077487/chrome-extension-message-passing-response-not-sent
-    return true;
-  });
-
-  * POPUP.JS
-
-// If you want to sendMessage from any popup or content script,
-// use `chrome.runtime.sendMessage()`.
-
-// Send message to background:
-chrome.runtime.sendMessage(p, function(response) {
-  console.log(`message from background: ${JSON.stringify(response)}`);
+var port = chrome.runtime.connect({name: "knockknock"});
+port.postMessage({joke: "Knock knock"});
+port.onMessage.addListener(function(msg) {
+  if (msg.question == "Who's there?")
+    port.postMessage({answer: "Madame"});
+  else if (msg.question == "Madame who?")
+    port.postMessage({answer: "Madame... Bovary"});
 });
 
-
-// If you want to sendMessage from tab of browser,
-// use `chrome.tabs.sendMessage()`.
-
-// Send message from active tab to background:
-chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-  chrome.tabs.sendMessage(tabs[0].id, p, function(response) {
-    console.log(`message from background: ${JSON.stringify(response)}`);
+chrome.runtime.onConnect.addListener(function(port) {
+  console.assert(port.name == "knockknock");
+  port.onMessage.addListener(function(msg) {
+    if (msg.joke == "Knock knock")
+      port.postMessage({question: "Who's there?"});
+    else if (msg.answer == "Madame")
+      port.postMessage({question: "Madame who?"});
+    else if (msg.answer == "Madame... Bovary")
+      port.postMessage({question: "I don't get it."});
   });
 });
 */
