@@ -23,12 +23,6 @@ function clearTabsNum() {
   });
 }
 
-/*Adds a given tab to the queue and updates the badge counter*/
-function enqueueTab(tab) {
-  bookmarkQueue.push(tab);
-  displayTabsNum(bookmarkQueue.length);
-}
-
 /*Removes a tab from the queue and updates the badge counter*/
 function dequeueTab() {
   if (bookmarkQueue.length > 1) {
@@ -37,6 +31,15 @@ function dequeueTab() {
     clearTabsNum();
   }
   return bookmarkQueue.shift();
+}
+
+function applyTabState(tabState) {
+  bookmarkQueue = tabState;
+  if (bookmarkQueue.length > 1) {
+    displayTabsNum(bookmarkQueue - 1);
+  } else {
+    clearTabsNum();
+  }
 }
 
 /*Opens a tab for a given URL*/
@@ -75,10 +78,19 @@ function stopOpening() {
   openedTabIds = [];
 }
 
-/*Opens a port to the popup and defines behavior on recieving messages*/
+/*Opens a port to the popup and sets up responding to popup actions*/
 function connectPopup(port) {
   if (port.extentsion && port.extentsion == 'Bookmark Opener') {
-
+    port.onMessage.addListener(function respondToMessage(msg) {
+      if (msg.initializePopup) {
+        port.postMessage(JSON.stringify(bookmarkQueue));
+      } else if (msg.tabState) {
+        let selectedBookmarks = JSON.parse(msg.tabState);
+        applyTabState(selectedBookmarks);
+      } else if (msg.startOpening) {
+        startOpening();
+      }
+    });
     port.onDisconnect.addListener(function disconnectPopup(){
       stopOpening();
     });
@@ -90,9 +102,6 @@ function main() {
 }
 
 main();
-
-//todo - communicate with the popup to update the bookmarkQueue (update badge from here)
-//todo - communicate with the popup on opening: to send the bookmarkQueue
 
 /*
 EXAMPLE FROM CHROME DEVELOPER
