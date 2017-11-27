@@ -4,33 +4,64 @@
 "use strict";
 
 var bookmarkQueue = [];
-var openedTabsIds = [];
+var openedTabIds = [];
 
-function enqueueTab(tab) {
-  bookmarkQueue.push(tab);
-}
-
-function dequeueTab() {
-  return bookmarkQueue.shift();
-}
-
-function openTab(newURL) {
-  chrome.tabs.create({ url: newURL }, function addTabId(tab){
-    openedTabsIds.push(tab.id);
+/*Adds a badge with the given number on it to the popup's icon*/
+function displayTabsNum(num) {
+  chrome.browserAction.setBadgeBackgroundColor({
+    color: [190, 190, 190, 0]
+  });
+  chrome.browserAction.setBadgeText({
+    text: String(num)
   });
 }
 
+/*Gets rid of any badge currently on the popup's icon*/
+function clearTabsNum() {
+  chrome.browserAction.setBadgeText({
+    text: ''
+  });
+}
+
+/*Adds a given tab to the queue and updates the badge counter*/
+function enqueueTab(tab) {
+  bookmarkQueue.push(tab);
+  displayTabsNum(bookmarkQueue.length);
+}
+
+/*Removes a tab from the queue and updates the badge counter*/
+function dequeueTab() {
+  if (bookmarkQueue.length > 1) {
+    displayTabsNum(bookmarkQueue - 1);
+  } else {
+    clearTabsNum();
+  }
+  return bookmarkQueue.shift();
+}
+
+/*Opens a tab for a given URL*/
+function openTab(newURL) {
+  chrome.tabs.create({ url: newURL }, function addTabId(tab){
+    openedTabIds.push(tab.id);
+  });
+}
+
+/*Checks if the activated tab is one of ours and opens more, if needed*/
 function activatedTabListener(tab) {
-  for (let i = 0; i < openedTabsIds.length; i++) {
+  for (let i = 0; i < openedTabIds.length; i++) {
     if (tab.id == openedTabIds[i]) {
-      openedTabsIds.splice(i, 1);
+      openedTabIds.splice(i, 1);
     }
-    while (openedTabsIds.length < numTabs && bookmarkQueue.length > 0) {
+    while (openedTabIds.length < numTabs && bookmarkQueue.length > 0) {
       openTab( dequeueTab() );
+    }
+    if (bookmarkQueue.length === 0) {
+      stopOpening();
     }
   }
 }
 
+/*Starts opening the set number of tabs and listens to activating tabs*/
 function startOpening() {
   for (let i = 0; i < numTabs && bookmarkQueue.length > 0; i++) {
     openTab( dequeueTab() );
@@ -38,36 +69,30 @@ function startOpening() {
   chrome.tabs.onActivated.addListener(activatedTabListener);
 }
 
+/*Gets rid of the listeners and assumes all opened tabs will be read*/
 function stopOpening() {
   chrome.tabs.onActivated.removeListener(activatedTabListener);
-  openedTabsIds = [];
+  openedTabIds = [];
 }
 
-chrome.runtime.onMessage.addListener(
-  function getMessages(request, sender, sendResponse) {
+/*Opens a port to the popup and defines behavior on recieving messages*/
+function connectPopup(port) {
+  if (port.extentsion && port.extentsion == 'Bookmark Opener') {
 
+    port.onDisconnect.addListener(function disconnectPopup(){
+      stopOpening();
+    });
   }
-);
+}
+
+function main() {
+  chrome.runtime.onConnect.addListener(connectPopup);
+}
+
+main();
 
 //todo - communicate with the popup to update the bookmarkQueue (update badge from here)
 //todo - communicate with the popup on opening: to send the bookmarkQueue
-
-/*
-EXAMPLE FROM STACKOVERFLOW
-SIMPLE ONE-TIME REQUEST
-
-chrome.runtime.sendMessage( {message: "preach", preachText: usrMessage} , function(response) {
-  console.log(`message from background: ${JSON.stringify(response)}`);
-});
-
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request.message == "preach"){ // Filter out other messages
-      console.log(request.preachText);
-    }
-    return true; //necessary for async if using sendResponse
-});
-*/
 
 /*
 EXAMPLE FROM CHROME DEVELOPER
@@ -92,5 +117,22 @@ chrome.runtime.onConnect.addListener(function(port) {
     else if (msg.answer == "Madame... Bovary")
       port.postMessage({question: "I don't get it."});
   });
+});
+*/
+
+/*
+EXAMPLE FROM STACKOVERFLOW
+SIMPLE ONE-TIME REQUEST
+
+chrome.runtime.sendMessage( {message: "preach", preachText: usrMessage} , function(response) {
+  console.log(`message from background: ${JSON.stringify(response)}`);
+});
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.message == "preach"){ // Filter out other messages
+      console.log(request.preachText);
+    }
+    return true; //necessary for async if using sendResponse
 });
 */

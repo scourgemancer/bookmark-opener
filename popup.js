@@ -173,31 +173,7 @@ function updateAllFolderCheckboxes() {
         folders[i].indeterminate = false;
       }
     }
-
-    let checkedBoxes = document.querySelectorAll('.bookmark input:checked');
-    if (checkedBoxes.length > 0) {
-      displayTabsNum(checkedBoxes.length);
-    } else {
-      clearTabsNum();
-    }
   }
-}
-
-/*Adds a badge with the given number on it to the popup's icon*/
-function displayTabsNum(num) {
-  chrome.browserAction.setBadgeBackgroundColor({
-    color: [190, 190, 190, 0]
-  });
-  chrome.browserAction.setBadgeText({
-    text: String(num)
-  });
-}
-
-/*Gets rid of any badge currently on the popup's icon*/
-function clearTabsNum() {
-  chrome.browserAction.setBadgeText({
-    text: ''
-  });
 }
 
 function linkOptionsPage() {
