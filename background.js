@@ -34,6 +34,7 @@ function dequeueTab() {
   return bookmarkQueue.shift();
 }
 
+/*Replaces the queue with a given array of tabs*/
 function applyTabState(tabState) {
   bookmarkQueue = tabState;
   if (bookmarkQueue.length > 1) {
@@ -80,22 +81,23 @@ function stopOpening() {
 }
 
 /*Opens a port to the popup and sets up responding to popup actions*/
-function connectPopup(port) {
-  if (port.extentsion && port.extentsion == 'Bookmark Opener') {
+function connectToPopup(port) {
+  if (port.extension && port.extension == 'Bookmark Opener') {
     port.onMessage.addListener(function respondToMessage(msg) {
       if (msg.initializePopup) {
         chrome.storage.sync.get({'numTabs': numTabs},
           function updateNumTabs(result) {
             numTabs = result.numTabs;
+            port.postMessage({'numTabs': numTabs});
           }
         );
-        port.postMessage(JSON.stringify(bookmarkQueue));
-        port.postMessage({'numTabs': numTabs});
+        port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
       } else if (msg.tabState) {
-        let selectedBookmarks = JSON.parse(msg.tabState);
-        applyTabState(selectedBookmarks);
+        applyTabState( JSON.parse(msg.tabState) );
       } else if (msg.startOpening) {
         startOpening();
+      } else if (msg.stopOpening) {
+        stopOpening();
       } else if (msg.newTabNum) {
         chrome.storage.sync.set({'numTabs': msg.newTabNum});
         numTabs = msg.newTabNum;
@@ -109,7 +111,7 @@ function connectPopup(port) {
 }
 
 function main() {
-  chrome.runtime.onConnect.addListener(connectPopup);
+  chrome.runtime.onConnect.addListener(connectToPopup);
 }
 
 main();

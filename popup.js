@@ -188,8 +188,43 @@ function linkOptionsPage() {
   }
 }
 
+/*Queries the background for what tabs have been selected already*/
+function getSelectedTabsAndTabNum(msg) {
+  if (msg.tabs) {
+    let queuedTabs = JSON.parse(msg.tabs);
+
+    //check the queued tabs
+
+  } else if (msg.numTabs) {
+    let numTabs = msg.numTabs;
+
+    //update the numTabs menu
+
+  }
+
+  //send the tabState message (an array of urls)
+  //send the startOpening message
+  //send the stopOpening message
+  //send the newTabNum message
+
+}
+
+var port = chrome.runtime.connect({extension: 'Bookmark Opener'});
+port.onmessage.addListener(getSelectedTabsAndNumTab);
+port.postMessage({initializePopup: true});
+
 /*Acts like the main method*/
 ready(function main() {
   viewBookmarks();
   linkOptionsPage();
 });
+
+/*
+port.postMessage({joke: "Knock knock"});
+port.onMessage.addListener(function(msg) {
+  if (msg.question == "Who's there?")
+    port.postMessage({answer: "Madame"});
+  else if (msg.question == "Madame who?")
+    port.postMessage({answer: "Madame... Bovary"});
+});
+*/
