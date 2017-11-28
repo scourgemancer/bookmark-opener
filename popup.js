@@ -157,6 +157,7 @@ function updateAllFolderCheckboxes() {
   const folders = document.getElementsByClassName('folder-checkbox');
   const contents = document.getElementsByClassName('folder-contents');
 
+  // Marks parent folders with their respective states
   for (let i = folders.length - 1; i >= 0; i--) {
     // -- instead of ++ so children are updated before parents
     let checkboxes = contents[i].querySelectorAll('input');
@@ -174,6 +175,14 @@ function updateAllFolderCheckboxes() {
       }
     }
   }
+
+  // Send the selected bookmarks to the background
+  let tabState = [];
+  const checked = document.querySelectorAll('.bookmark-checkbox:checked + a');
+  for (const bookmark of checked) {
+    tabState.push(bookmark.href);
+  }
+  port.postMessage({'tabState': tabState});
 }
 
 function linkOptionsPage() {
@@ -189,29 +198,23 @@ function linkOptionsPage() {
 }
 
 /*Queries the background for what tabs have been selected already*/
-function getSelectedTabsAndTabNum(msg) {
-  if (msg.tabs) {
+function getSelectedTabsAndNumTabs(msg) {
+  if ('tabs' in msg) {
     let queuedTabs = JSON.parse(msg.tabs);
 
-    //check the queued tabs
+    //todo - checkmark the queued tabs
 
-  } else if (msg.numTabs) {
+  } else if ('numTabs' in msg) {
     let numTabs = msg.numTabs;
 
-    //update the numTabs menu
+    //todo - update the numTabs menu
 
   }
-
-  //send the tabState message (an array of urls)
-  //send the startOpening message
-  //send the stopOpening message
-  //send the newTabNum message
-
 }
 
-var port = chrome.runtime.connect({extension: 'Bookmark Opener'});
-port.onmessage.addListener(getSelectedTabsAndNumTab);
-port.postMessage({initializePopup: true});
+var port = chrome.runtime.connect({'name': 'Bookmark Opener'});
+port.onMessage.addListener(getSelectedTabsAndNumTabs);
+port.postMessage({'initializePopup': true});
 
 /*Acts like the main method*/
 ready(function main() {
@@ -219,12 +222,7 @@ ready(function main() {
   linkOptionsPage();
 });
 
-/*
-port.postMessage({joke: "Knock knock"});
-port.onMessage.addListener(function(msg) {
-  if (msg.question == "Who's there?")
-    port.postMessage({answer: "Madame"});
-  else if (msg.question == "Madame who?")
-    port.postMessage({answer: "Madame... Bovary"});
-});
-*/
+//todo - send the tabState message (an array of urls)
+//todo - send the startOpening message
+//todo - send the stopOpening message
+//todo - send the newTabNum message

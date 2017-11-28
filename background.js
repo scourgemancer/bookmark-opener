@@ -82,9 +82,9 @@ function stopOpening() {
 
 /*Opens a port to the popup and sets up responding to popup actions*/
 function connectToPopup(port) {
-  if (port.extension && port.extension == 'Bookmark Opener') {
+  if ('name' in port && port.name == 'Bookmark Opener') {
     port.onMessage.addListener(function respondToMessage(msg) {
-      if (msg.initializePopup) {
+      if ('initializePopup' in msg) {
         chrome.storage.sync.get({'numTabs': numTabs},
           function updateNumTabs(result) {
             numTabs = result.numTabs;
@@ -92,13 +92,13 @@ function connectToPopup(port) {
           }
         );
         port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
-      } else if (msg.tabState) {
+      } else if ('tabState' in msg) {
         applyTabState( JSON.parse(msg.tabState) );
-      } else if (msg.startOpening) {
+      } else if ('startOpening' in msg) {
         startOpening();
-      } else if (msg.stopOpening) {
+      } else if ('stopOpening' in msg) {
         stopOpening();
-      } else if (msg.newTabNum) {
+      } else if ('newTabNum' in msg) {
         chrome.storage.sync.set({'numTabs': msg.newTabNum});
         numTabs = msg.newTabNum;
       }
