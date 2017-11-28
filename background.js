@@ -5,6 +5,7 @@
 
 var bookmarkQueue = [];
 var openedTabIds = [];
+var numTabs = 4;
 
 /*Adds a badge with the given number on it to the popup's icon*/
 function displayTabsNum(num) {
@@ -83,17 +84,27 @@ function connectPopup(port) {
   if (port.extentsion && port.extentsion == 'Bookmark Opener') {
     port.onMessage.addListener(function respondToMessage(msg) {
       if (msg.initializePopup) {
+        chrome.storage.sync.get({'numTabs': numTabs},
+          function updateNumTabs(result) {
+            numTabs = result.numTabs;
+          }
+        );
         port.postMessage(JSON.stringify(bookmarkQueue));
+        port.postMessage({'numTabs': numTabs});
       } else if (msg.tabState) {
         let selectedBookmarks = JSON.parse(msg.tabState);
         applyTabState(selectedBookmarks);
       } else if (msg.startOpening) {
         startOpening();
+      } else if (msg.newTabNum) {
+        chrome.storage.sync.set({'numTabs': msg.newTabNum});
+        numTabs = msg.newTabNum;
       }
     });
     port.onDisconnect.addListener(function disconnectPopup(){
       stopOpening();
     });
+
   }
 }
 
