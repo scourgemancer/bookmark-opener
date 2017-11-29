@@ -7,6 +7,7 @@ var bookmarkQueue = [];
 var openedTabIds = [];
 var numTabs = 4;
 var currentlyOpening = false;
+var port;
 
 /*Adds a badge with the given number on it to the popup's icon*/
 function displayTabsNum(num) {
@@ -38,8 +39,8 @@ function dequeueTab() {
 /*Replaces the queue with a given array of tabs*/
 function applyTabState(tabState) {
   bookmarkQueue = tabState;
-  if (bookmarkQueue.length > 1) {
-    displayTabsNum(bookmarkQueue - 1);
+  if (bookmarkQueue.length > 0) {
+    displayTabsNum(bookmarkQueue.length);
   } else {
     clearTabsNum();
   }
@@ -52,6 +53,9 @@ function openTab(newURL) {
       openedTabIds.push(tab.id);
     }
   );
+  if (port) {
+    port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
+  }
 }
 
 /*Checks if the activated tab is one of ours and opens more, if needed*/
@@ -86,8 +90,9 @@ function stopOpening() {
 }
 
 /*Opens a port to the popup and sets up responding to popup actions*/
-function connectToPopup(port) {
-  if ('name' in port && port.name == 'Bookmark Opener') {
+function connectToPopup(newPort) {
+  if ('name' in newPort && newPort.name == 'Bookmark Opener') {
+    port = newPort;
     port.onMessage.addListener(function respondToMessage(msg) {
       if ('initializePopup' in msg) {
         chrome.storage.sync.get({'numTabs': numTabs},
@@ -110,9 +115,8 @@ function connectToPopup(port) {
       }
     });
     port.onDisconnect.addListener(function disconnectPopup(){
-      stopOpening();
+      port = false;
     });
-
   }
 }
 
@@ -121,5 +125,3 @@ function main() {
 }
 
 main();
-
-//todo - deal with the Nan in the badge
