@@ -220,10 +220,18 @@ function enableStartButton() {
 function getSelectedTabsAndNumTabs(msg) {
   if ('tabs' in msg) {
     let queuedTabs = JSON.parse(msg.tabs);
-
-    //todo - checkmark the queued tabs
-
-
+    const bookmarkCheckboxes = document.querySelectorAll('.bookmark > input');
+    const bookmarkLinks = document.querySelectorAll('.bookmark > a');
+    // checks each tab that the background has queued
+    for (let i = 0; i < bookmarkLinks.length; i++) {
+      for (let j = 0; j < queuedTabs.length; j++) {
+        if (bookmarkLinks[i].href == queuedTabs[j]) {
+          bookmarkCheckboxes[i].checked = true;
+          break;
+        }
+      }
+    }
+    updateAllFolderCheckboxes();
 
 
 
