@@ -109,6 +109,10 @@ function displayBookmark(node, parent) {
 
   let bookmark = document.createElement('a');
   bookmark.setAttribute('href', node.url);
+  bookmark.onclick = function patchLinkClicking() {
+    // Links don't toggle the checkbox on their own
+    bookmarkInput.checked = !bookmarkInput.checked;
+  }
 
   let icon = document.createElement('img');
   icon.setAttribute('src', 'chrome://favicon/' + node.url);
@@ -182,7 +186,7 @@ function updateAllFolderCheckboxes() {
   for (const bookmark of checked) {
     tabState.push(bookmark.href);
   }
-  port.postMessage({'tabState': tabState});
+  port.postMessage({'tabState': JSON.stringify(tabState)});
 }
 
 function linkOptionsPage() {
@@ -218,6 +222,20 @@ function getSelectedTabsAndNumTabs(msg) {
     let queuedTabs = JSON.parse(msg.tabs);
 
     //todo - checkmark the queued tabs
+
+
+
+
+
+
+    //todo - handle multiple bookmarks with the same url
+    //       I'm thinking run a linear check and send 1+
+    //       number(s) if repeated to represent selected
+
+
+
+
+
 
   } else if ('numTabs' in msg) {
     let numTabs = msg.numTabs;
