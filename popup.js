@@ -156,6 +156,16 @@ function makeCheckboxesInteractive() {
   }
 }
 
+//*Send the selected bookmarks to the background*/
+function sendTabState() {
+  let tabState = [];
+  const checked = document.querySelectorAll('.bookmark-checkbox:checked + a');
+  for (const bookmark of checked) {
+    tabState.push(bookmark.href);
+  }
+  port.postMessage({'tabState': JSON.stringify(tabState)});
+}
+
 /*Finding a parent folder is hard, so update everyone instead*/
 function updateAllFolderCheckboxes() {
   const folders = document.getElementsByClassName('folder-checkbox');
@@ -180,13 +190,16 @@ function updateAllFolderCheckboxes() {
     }
   }
 
-  // Send the selected bookmarks to the background
-  let tabState = [];
-  const checked = document.querySelectorAll('.bookmark-checkbox:checked + a');
-  for (const bookmark of checked) {
-    tabState.push(bookmark.href);
+  sendTabState();
+
+  const startSwitch = document.querySelector('#start-button');
+  const checked = document.querySelectorAll('.bookmark-checkbox:checked');
+  if (checked.length > 0) {
+    startSwitch.disabled = false;
+  } else {
+    startSwitch.disabled = true;
+    startSwitch.checked = false;
   }
-  port.postMessage({'tabState': JSON.stringify(tabState)});
 }
 
 function linkOptionsPage() {
