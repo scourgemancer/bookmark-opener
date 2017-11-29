@@ -86,7 +86,7 @@ function displayFolder(node, parent) {
   contents.style.display = 'none';
 
   // Animates arrow and adds accordion functionality
-  folder.onclick = function () {
+  folder.onclick = function animateArrow() {
     if (folderToggle.classList.contains('rotated')) {
       folderToggle.classList.remove('rotated');
     } else {
@@ -129,7 +129,7 @@ function makeCheckboxesInteractive() {
 
   // Selecting a bookmark changes the parent's checked status
   for (let input of document.querySelectorAll('.bookmark-checkbox')) {
-    input.onclick = function () {
+    input.onclick = function updateCheckboxes() {
       updateAllFolderCheckboxes(folders, contents);
     }
   }
@@ -186,13 +186,28 @@ function updateAllFolderCheckboxes() {
 }
 
 function linkOptionsPage() {
-  document.getElementById('settings-icon').onclick = function () {
+  document.getElementById('settings-icon').onclick = function linkOptions() {
     if (chrome.runtime.openOptionsPage) {
       // New way to open options pages, if supported (Chrome 42+)
       chrome.runtime.openOptionsPage();
     } else {
       // Reasonable fallback
       window.open(chrome.runtime.getURL('options.html'));
+    }
+  }
+}
+
+/*Adds functionality to the on/off button*/
+function enableStartButton() {
+  const label = document.querySelector('.switch');
+  const checkbox = label.querySelector('#start-button');
+  label.onclick = function toggleStart(event) {
+    if (event.target.tagName == 'INPUT') { // since label sends one too
+      if (checkbox.checked) {
+        port.postMessage({'startOpening': true});
+      } else {
+        port.postMessage({'stopOpening': true});
+      }
     }
   }
 }
@@ -220,9 +235,5 @@ port.postMessage({'initializePopup': true});
 ready(function main() {
   viewBookmarks();
   linkOptionsPage();
+  enableStartButton();
 });
-
-//todo - send the tabState message (an array of urls)
-//todo - send the startOpening message
-//todo - send the stopOpening message
-//todo - send the newTabNum message
