@@ -230,7 +230,7 @@ function enableStartButton() {
 }
 
 /*Queries the background for what tabs have been selected already*/
-function getSelectedTabsAndNumTabs(msg) {
+function getBackgroundStates(msg) {
   if ('tabs' in msg) {
     let queuedTabs = JSON.parse(msg.tabs);
     const bookmarkCheckboxes = document.querySelectorAll('.bookmark > input');
@@ -263,11 +263,14 @@ function getSelectedTabsAndNumTabs(msg) {
 
     //todo - update the numTabs menu
 
+  } else if ('currentlyOpening' in msg) {
+    const startSwitch = document.querySelector('#start-button');
+    startSwitch.selected = msg.currentlyOpening;
   }
 }
 
 var port = chrome.runtime.connect({'name': 'Bookmark Opener'});
-port.onMessage.addListener(getSelectedTabsAndNumTabs);
+port.onMessage.addListener(getBackgroundStates);
 port.postMessage({'initializePopup': true});
 
 /*Acts like the main method*/

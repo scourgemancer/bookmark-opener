@@ -6,6 +6,7 @@
 var bookmarkQueue = [];
 var openedTabIds = [];
 var numTabs = 4;
+var currentlyOpening = false;
 
 /*Adds a badge with the given number on it to the popup's icon*/
 function displayTabsNum(num) {
@@ -46,9 +47,11 @@ function applyTabState(tabState) {
 
 /*Opens a tab for a given URL*/
 function openTab(newURL) {
-  chrome.tabs.create({ url: newURL }, function addTabId(tab){
-    openedTabIds.push(tab.id);
-  });
+  chrome.tabs.create({ 'url': newURL, 'selected': false },
+    function addTabId(tab){
+      openedTabIds.push(tab.id);
+    }
+  );
 }
 
 /*Checks if the activated tab is one of ours and opens more, if needed*/
@@ -72,12 +75,14 @@ function startOpening() {
     openTab( dequeueTab() );
   }
   chrome.tabs.onActivated.addListener(activatedTabListener);
+  currentlyOpening = true;
 }
 
 /*Gets rid of the listeners and assumes all opened tabs will be read*/
 function stopOpening() {
   chrome.tabs.onActivated.removeListener(activatedTabListener);
   openedTabIds = [];
+  currentlyOpening = false;
 }
 
 /*Opens a port to the popup and sets up responding to popup actions*/
@@ -92,6 +97,7 @@ function connectToPopup(port) {
           }
         );
         port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
+        port.postMessage({'currentlyOpening': currentlyOpening});
       } else if ('tabState' in msg) {
         applyTabState( JSON.parse(msg.tabState) );
       } else if ('startOpening' in msg) {
