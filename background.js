@@ -10,7 +10,13 @@ var currentlyOpening = false;
 var port;
 
 /*Adds a badge with the given number on it to the popup's icon*/
-function displayTabsNum(num) {
+function displayTabsNum() {
+  let num = 0;
+  for (const bookmark of bookmarkQueue) {
+    if (bookmark[1]) {
+      num++;
+    }
+  }
   chrome.browserAction.setBadgeBackgroundColor({
     color: [190, 190, 190, 0]
   });
@@ -29,18 +35,27 @@ function clearTabsNum() {
 /*Removes a tab from the queue and updates the badge counter*/
 function dequeueTab() {
   if (bookmarkQueue.length > 1) {
-    displayTabsNum(bookmarkQueue - 1);
+    displayTabsNum();
   } else {
     clearTabsNum();
   }
-  return bookmarkQueue.shift();
+  let tab = bookmarkQueue.shift();
+  if (port) {
+    port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
+  }
+  return tab;
 }
 
 /*Replaces the queue with a given array of tabs*/
 function applyTabState(tabState) {
-  bookmarkQueue = tabState;
+  bookmarkQueue = [];
+  for (const tab of tabState) {
+    if (tab[1]) {
+      bookmarkQueue.push( tab[0] );
+    }
+  }
   if (bookmarkQueue.length > 0) {
-    displayTabsNum(bookmarkQueue.length);
+    displayTabsNum();
   } else {
     clearTabsNum();
   }
@@ -53,9 +68,6 @@ function openTab(newURL) {
       openedTabIds.push(tab.id);
     }
   );
-  if (port) {
-    port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
-  }
 }
 
 /*Checks if the activated tab is one of ours and opens more, if needed*/

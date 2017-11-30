@@ -159,9 +159,10 @@ function makeCheckboxesInteractive() {
 //*Send the selected bookmarks to the background*/
 function sendTabState() {
   let tabState = [];
-  const checked = document.querySelectorAll('.bookmark-checkbox:checked + a');
-  for (const bookmark of checked) {
-    tabState.push(bookmark.href);
+  const bookmarkLinks = document.querySelectorAll('.bookmark > a');
+  const bookmarkCheckboxes = document.querySelectorAll('.bookmark > input');
+  for (let i = 0; i < bookmarkLinks.length; i++) {
+    tabState.push( [bookmarkLinks[i], bookmarkCheckboxes[i].selected] );
   }
   port.postMessage({'tabState': JSON.stringify(tabState)});
 }
@@ -232,32 +233,13 @@ function enableStartButton() {
 /*Queries the background for what tabs have been selected already*/
 function getBackgroundStates(msg) {
   if ('tabs' in msg) {
-    let queuedTabs = JSON.parse(msg.tabs);
+    let tabState = JSON.parse(msg.tabs);
     const bookmarkCheckboxes = document.querySelectorAll('.bookmark > input');
-    const bookmarkLinks = document.querySelectorAll('.bookmark > a');
     // checks each tab that the background has queued
-    for (let i = 0; i < bookmarkLinks.length; i++) {
-      for (let j = 0; j < queuedTabs.length; j++) {
-        if (bookmarkLinks[i].href == queuedTabs[j]) {
-          bookmarkCheckboxes[i].checked = true;
-          break;
-        }
-      }
+    for (let i = 0; i < tabState.length; i++) {
+      bookmarkCheckboxes[i].checked = tabState[i][1];
     }
     updateAllFolderCheckboxes();
-
-
-
-
-    //todo - handle multiple bookmarks with the same url
-    //       I'm thinking run a linear check and send 1+
-    //       number(s) if repeated to represent selected
-
-
-
-
-
-
   } else if ('numTabs' in msg) {
     let numTabs = msg.numTabs;
 
