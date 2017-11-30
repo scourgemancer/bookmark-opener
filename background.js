@@ -9,19 +9,24 @@ var numTabs = 4;
 var currentlyOpening = false;
 var port;
 
-/*Adds a badge with the given number on it to the popup's icon*/
-function displayTabsNum() {
+/*Returns the number of queued bookmarks*/
+function getQueuedNum() {
   let num = 0;
   for (const bookmark of bookmarkQueue) {
     if (bookmark[1]) {
       num++;
     }
   }
+  return num;
+}
+
+/*Adds a badge with the given number on it to the popup's icon*/
+function displayTabsNum() {
   chrome.browserAction.setBadgeBackgroundColor({
     color: [190, 190, 190, 0]
   });
   chrome.browserAction.setBadgeText({
-    text: String(num)
+    text: String( getQueuedNum() )
   });
 }
 
@@ -34,27 +39,34 @@ function clearTabsNum() {
 
 /*Removes a tab from the queue and updates the badge counter*/
 function dequeueTab() {
-  if (bookmarkQueue.length > 1) {
+  // Finds the first queued tab
+  let tab;
+  for (let bookmark of bookmarkQueue) {
+    if (bookmark[1]) {
+      tab = bookmark[0];
+      bookmark[1] = false;
+      break;
+    }
+  }
+
+  // Signals the change to the popup, if open
+  if (port) {
+    port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
+  }
+
+  // Updates the badge counter
+  if (getQueuedNum() > 0) {
     displayTabsNum();
   } else {
     clearTabsNum();
-  }
-  let tab = bookmarkQueue.shift();
-  if (port) {
-    port.postMessage({'tabs': JSON.stringify(bookmarkQueue)});
   }
   return tab;
 }
 
 /*Replaces the queue with a given array of tabs*/
 function applyTabState(tabState) {
-  bookmarkQueue = [];
-  for (const tab of tabState) {
-    if (tab[1]) {
-      bookmarkQueue.push( tab[0] );
-    }
-  }
-  if (bookmarkQueue.length > 0) {
+  bookmarkQueue = tabState;
+  if (getQueuedNum() > 0) {
     displayTabsNum();
   } else {
     clearTabsNum();
@@ -76,10 +88,10 @@ function activatedTabListener(tab) {
     if (tab.id == openedTabIds[i]) {
       openedTabIds.splice(i, 1);
     }
-    while (openedTabIds.length < numTabs && bookmarkQueue.length > 0) {
+    while (openedTabIds.length < numTabs && getQueuedNum() > 0) {
       openTab( dequeueTab() );
     }
-    if (bookmarkQueue.length === 0) {
+    if (getQueuedNum() === 0) {
       stopOpening();
     }
   }
@@ -87,7 +99,7 @@ function activatedTabListener(tab) {
 
 /*Starts opening the set number of tabs and listens to activating tabs*/
 function startOpening() {
-  for (let i = 0; i < numTabs && bookmarkQueue.length > 0; i++) {
+  for (let i = 0; i < numTabs && getQueuedNum() > 0; i++) {
     openTab( dequeueTab() );
   }
   chrome.tabs.onActivated.addListener(activatedTabListener);

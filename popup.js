@@ -233,9 +233,9 @@ function enableStartButton() {
 /*Queries the background for what tabs have been selected already*/
 function getBackgroundStates(msg) {
   if ('tabs' in msg) {
+    // checks each tab that the background has queued
     let tabState = JSON.parse(msg.tabs);
     const bookmarkCheckboxes = document.querySelectorAll('.bookmark > input');
-    // checks each tab that the background has queued
     for (let i = 0; i < tabState.length; i++) {
       bookmarkCheckboxes[i].checked = tabState[i][1];
     }
