@@ -112,6 +112,7 @@ function displayBookmark(node, parent) {
   bookmark.onclick = function patchLinkClicking() {
     // Links don't toggle the checkbox on their own
     bookmarkInput.checked = !bookmarkInput.checked;
+    updateAllFolderCheckboxes();
   }
 
   let icon = document.createElement('img');
@@ -134,7 +135,7 @@ function makeCheckboxesInteractive() {
   // Selecting a bookmark changes the parent's checked status
   for (let input of document.querySelectorAll('.bookmark-checkbox')) {
     input.onclick = function updateCheckboxes() {
-      updateAllFolderCheckboxes(folders, contents);
+      updateAllFolderCheckboxes();
     }
   }
   for (let i = 0; i < folders.length; i++) {
@@ -143,7 +144,7 @@ function makeCheckboxesInteractive() {
       for (let input of contents[i].querySelectorAll('input')) {
         input.checked = folders[i].checked;
       }
-      updateAllFolderCheckboxes(folders, contents);
+      updateAllFolderCheckboxes();
 
       // This is to undo the effect of clicking on the folder
       toggle(contents[i]);
