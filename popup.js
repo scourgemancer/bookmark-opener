@@ -162,7 +162,7 @@ function sendTabState() {
   const bookmarkLinks = document.querySelectorAll('.bookmark > a');
   const bookmarkCheckboxes = document.querySelectorAll('.bookmark > input');
   for (let i = 0; i < bookmarkLinks.length; i++) {
-    tabState.push( [bookmarkLinks[i], bookmarkCheckboxes[i].selected] );
+    tabState.push( [bookmarkLinks[i], bookmarkCheckboxes[i].checked] );
   }
   port.postMessage({'tabState': JSON.stringify(tabState)});
 }
