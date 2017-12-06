@@ -1,4 +1,4 @@
-/*global chrome, document, window*/
+/*global chrome, document*/
 /* eslint-env es6 */
 
 "use strict";
@@ -204,15 +204,20 @@ function updateAllFolderCheckboxes() {
   }
 }
 
-function linkOptionsPage() {
-  document.getElementById('settings-icon').onclick = function linkOptions() {
-    if (chrome.runtime.openOptionsPage) {
-      // New way to open options pages, if supported (Chrome 42+)
-      chrome.runtime.openOptionsPage();
-    } else {
-      // Reasonable fallback
-      window.open(chrome.runtime.getURL('options.html'));
+/*Styles the numTabs input element*/
+function styleTabNumInput(){
+  let numTabs = document.getElementById('numTabs');
+  numTabs.onkeydown = function respondToInput(event){
+    if (event.key == 'ArrowUp') {
+
+    } else if (event.key == 'ArrowDown') {
+
+    } else if (event.key == 'ArrowLeft') {
+
+    } else if (event.key == 'ArrowRight') {
+
     }
+    return false;
   }
 }
 
@@ -259,6 +264,6 @@ port.postMessage({'initializePopup': true});
 /*Acts like the main method*/
 ready(function main() {
   viewBookmarks();
-  linkOptionsPage();
+  styleTabNumInput();
   enableStartButton();
 });
