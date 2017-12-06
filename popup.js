@@ -209,13 +209,13 @@ function styleTabNumInput(){
   let numTabs = document.getElementById('numTabs');
   numTabs.onkeydown = function respondToInput(event){
     if (event.key == 'ArrowUp') {
-
+      numTabs.stepUp();
     } else if (event.key == 'ArrowDown') {
-
+      numTabs.stepDown();
     } else if (event.key == 'ArrowLeft') {
-
+      numTabs.stepDown();
     } else if (event.key == 'ArrowRight') {
-
+      numTabs.stepUp();
     }
     return false;
   }
