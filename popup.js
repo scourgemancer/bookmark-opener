@@ -247,10 +247,7 @@ function getBackgroundStates(msg) {
     }
     updateAllFolderCheckboxes();
   } else if ('numTabs' in msg) {
-    let numTabs = msg.numTabs;
-
-    //todo - update the numTabs menu
-
+    document.getElementById('numTabs').value = msg.numTabs;
   } else if ('currentlyOpening' in msg) {
     const startSwitch = document.querySelector('#start-button');
     startSwitch.selected = msg.currentlyOpening;
