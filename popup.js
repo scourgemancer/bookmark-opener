@@ -216,8 +216,11 @@ function styleTabNumInput(){
       numTabs.stepDown();
     } else if (event.key == 'ArrowRight') {
       numTabs.stepUp();
+    } else if (event.key == 'Backspace') {
+      if (numTabs.value < 10) {
+          return false;
+      }
     }
-    return false;
   }
 }
 
