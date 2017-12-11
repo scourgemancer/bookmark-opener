@@ -21,21 +21,11 @@ body {
   transform: scaleX(2);
 }
 
-#navbar p {
-  float: right;
-  margin: 0.35em 0em 0em 0em;
-}
-
 #settings-icon {
   float: right;
   height: 1.5em;
   width: 1.5em;
   margin: 0.25em 1em 0em 0em;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-   opacity: 1;
 }
 
 .switch {
@@ -108,7 +98,6 @@ input:checked + .slider:after {
   border: 0.1em solid black;
   border-radius: 0.5em;
   margin: 0.5em 0;
-  background-color: #fafae6;
 }
 
 .bookmark {
@@ -152,4 +141,9 @@ a {
 
 p {
   display: inline;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+   opacity: 1;
 }
