@@ -3,6 +3,10 @@ body {
   background-color: #f0f0f0;
 }
 
+
+/******************Navbar Styling******************/
+
+
 #navbar {
   top: 0;
   padding: 0.9em 0em;
@@ -88,6 +92,41 @@ input:checked + .slider:after {
   content: 'ON';
 }
 
+
+/******************Options Styling******************/
+
+
+#options {
+  display: none;
+}
+
+input[type=color] {
+}
+
+button {
+}
+
+#navbar p {
+  float: right;
+  margin: 0.35em 0em 0em 0em;
+}
+
+#numTabs {
+  float: right;
+  width: 2.5em;
+  margin: 0.25em 1em 0em 0.3em;
+  padding: 0em;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+   opacity: 1;
+}
+
+
+/******************Content Styling******************/
+
+
 #bookmarks {
   margin-top: 4em;
 }
@@ -141,9 +180,4 @@ a {
 
 p {
   display: inline;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-   opacity: 1;
 }
