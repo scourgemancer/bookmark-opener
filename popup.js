@@ -224,6 +224,36 @@ function styleTabNumInput(){
   }
 }
 
+/*Sets up the inputs in the options menu*/
+function setUpOptions() {
+  const backgroundColor = document.getElementById('background-color');
+  const folderColor = document.getElementById('folder-color');
+  const bookmarkColor = document.getElementById('bookmark-color');
+
+  backgroundColor.addEventListener('input', function colorWatcher(event){ //todo - maybe 'change'
+    document.body.style.backgroundColor = event.target.value;
+  });
+
+  folderColor.addEventListener('input', function colorWatcher(event){ //todo - maybe 'change'
+    document.getElementsByClassName('folder').forEach(function updateColor(folder){
+      folder.style.color = event.target.value;
+    });
+  });
+
+  bookmarkColor.addEventListener('input', function colorWatcher(event){ //todo - maybe 'change'
+    document.getElementsByClassName('bookmark').forEach(function updateColor(bookmark){
+      bookmark.style.color = event.target.value;
+    });
+  });
+
+  let reset = document.getElementById('reset');
+  reset.onclick = function resetColors(){
+    //todo
+  }
+
+  styleTabNumInput();
+}
+
 /*Adds functionality to the on/off button*/
 function enableStartButton() {
   const label = document.querySelector('.switch');
@@ -264,6 +294,6 @@ port.postMessage({'initializePopup': true});
 /*Acts like the main method*/
 ready(function main() {
   viewBookmarks();
-  styleTabNumInput();
+  setUpOptions();
   enableStartButton();
 });
