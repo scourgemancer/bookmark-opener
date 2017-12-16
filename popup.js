@@ -140,7 +140,7 @@ function makeCheckboxesInteractive() {
   }
   for (let i = 0; i < folders.length; i++) {
     // Selecting a folder toggles selecting all of it's children
-    folders[i].onclick = function () {
+    folders[i].onclick = function openFolder() {
       for (let input of contents[i].querySelectorAll('input')) {
         input.checked = folders[i].checked;
       }
@@ -226,6 +226,15 @@ function styleTabNumInput(){
 
 /*Sets up the inputs in the options menu*/
 function setUpOptions() {
+  const optionsButton = document.getElementById('settings-icon');
+  const navbarContents = document.getElementById('navbar-contents');
+  const options = document.getElementById('options');
+  optionsButton.onclick = function toggleOptions() {
+    toggle(navbarContents);
+    optionsButton.style.display = 'default';
+    toggle(options);
+  }
+
   const backgroundColor = document.getElementById('background-color');
   const folderColor = document.getElementById('folder-color');
   const bookmarkColor = document.getElementById('bookmark-color');
