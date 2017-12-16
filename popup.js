@@ -231,7 +231,6 @@ function setUpOptions() {
   const options = document.getElementById('options');
   optionsButton.onclick = function toggleOptions() {
     toggle(navbarContents);
-    optionsButton.style.display = 'default';
     toggle(options);
   }
 
