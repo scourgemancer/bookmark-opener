@@ -96,10 +96,6 @@ input:checked + .slider:after {
 /******************Options Styling******************/
 
 
-#options {
-  display: none;
-}
-
 input[type=color] {
 }
 

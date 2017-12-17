@@ -233,6 +233,7 @@ function setUpOptions() {
     toggle(navbarContents);
     toggle(options);
   }
+  toggle(options); // to start it off as hidden
 
   const backgroundColor = document.getElementById('background-color');
   const folderColor = document.getElementById('folder-color');
