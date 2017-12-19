@@ -208,7 +208,11 @@ function updateAllFolderCheckboxes() {
 function styleTabNumInput(){
   let numTabs = document.getElementById('numTabs');
   numTabs.onkeydown = function respondToInput(event){
-    if (event.key == 'ArrowLeft') {
+    if (event.key == 'ArrowUp') {
+      return true; // since up and down already step the counter
+    } else if (event.key == 'ArrowDown') {
+      return true;
+    } else if (event.key == 'ArrowLeft') {
       numTabs.stepDown();
     } else if (event.key == 'ArrowRight') {
       numTabs.stepUp();
@@ -216,6 +220,8 @@ function styleTabNumInput(){
       if (numTabs.value < 10) {
           return false;
       }
+    } else {
+      return false;
     }
   }
 }
@@ -225,11 +231,11 @@ function setUpOptions() {
   const optionsButton = document.getElementById('settings-icon');
   const navbarContents = document.getElementById('navbar-contents');
   const options = document.getElementById('options');
+  toggle(options); // to start them off as hidden
   optionsButton.onclick = function toggleOptions() {
     toggle(navbarContents);
     toggle(options);
   }
-  toggle(options); // to start it off as hidden
 
   const backgroundColor = document.getElementById('background-color');
   const folderColor = document.getElementById('folder-color');
