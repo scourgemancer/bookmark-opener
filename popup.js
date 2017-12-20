@@ -209,9 +209,9 @@ function styleTabNumInput(){
   let numTabs = document.getElementById('numTabs');
   numTabs.onkeydown = function respondToInput(event){
     if (event.key == 'ArrowUp') {
-      return true; // since up and down already step the counter
+      //numTabs.stepUp();    not needed since it steps by default
     } else if (event.key == 'ArrowDown') {
-      return true;
+      //numTabs.stepDown();  also not needed
     } else if (event.key == 'ArrowLeft') {
       numTabs.stepDown();
     } else if (event.key == 'ArrowRight') {
@@ -220,49 +220,8 @@ function styleTabNumInput(){
       if (numTabs.value < 10) {
           return false;
       }
-    } else {
-      return false;
     }
   }
-}
-
-/*Sets up the inputs in the options menu*/
-function setUpOptions() {
-  const optionsButton = document.getElementById('settings-icon');
-  const navbarContents = document.getElementById('navbar-contents');
-  const options = document.getElementById('options');
-  toggle(options); // to start them off as hidden
-  optionsButton.onclick = function toggleOptions() {
-    toggle(navbarContents);
-    toggle(options);
-  }
-
-  const backgroundColor = document.getElementById('background-color');
-  const folderColor = document.getElementById('folder-color');
-  const bookmarkColor = document.getElementById('bookmark-color');
-
-  backgroundColor.addEventListener('input', function colorWatcher(event){ //todo - maybe 'change'
-    document.body.style.backgroundColor = event.target.value;
-  });
-
-  folderColor.addEventListener('input', function colorWatcher(event){ //todo - maybe 'change'
-    document.getElementsByClassName('folder').forEach(function updateColor(folder){
-      folder.style.color = event.target.value;
-    });
-  });
-
-  bookmarkColor.addEventListener('input', function colorWatcher(event){ //todo - maybe 'change'
-    document.getElementsByClassName('bookmark').forEach(function updateColor(bookmark){
-      bookmark.style.color = event.target.value;
-    });
-  });
-
-  let reset = document.getElementById('reset');
-  reset.onclick = function resetColors(){
-    //todo
-  }
-
-  styleTabNumInput();
 }
 
 /*Adds functionality to the on/off button*/
@@ -305,6 +264,6 @@ port.postMessage({'initializePopup': true});
 /*Acts like the main method*/
 ready(function main() {
   viewBookmarks();
-  setUpOptions();
+  styleTabNumInput();
   enableStartButton();
 });
