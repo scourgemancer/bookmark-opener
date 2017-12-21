@@ -196,11 +196,14 @@ function updateAllFolderCheckboxes() {
 
   const startSwitch = document.querySelector('#start-button');
   const checked = document.querySelectorAll('.bookmark-checkbox:checked');
+  const slider = document.querySelector('.slider');
   if (checked.length > 0) {
     startSwitch.disabled = false;
+    slider.classList.remove('disabled');
   } else {
     startSwitch.disabled = true;
     startSwitch.checked = false;
+    slider.classList.add('disabled');
   }
 }
 

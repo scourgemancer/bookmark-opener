@@ -92,26 +92,9 @@ input:checked + .slider:after {
   content: 'ON';
 }
 
-
-/******************Options Styling******************/
-
-
-input[type=color] {
-  position: relative;
-  bottom: 0.1em;
-  width: 11%;
-  margin-left: 0.1em;
-  border-radius: 0.5em;
-}
-
-#bookmark-color {
-  margin-left: 0.3em;
-}
-
-button {
-  position: relative;
-  bottom: 0.2em;
-  width: 15%;
+.disabled {
+  transition: background-color 0.8s;
+  background-color: gray;
 }
 
 #navbar p {
