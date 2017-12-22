@@ -225,6 +225,11 @@ function styleTabNumInput(){
       }
     }
   }
+  numTabs.addEventListener("input",
+    function sendNewTabNum(){
+      port.postMessage({'newTabNum': numTabs.value});
+    }
+  );
 }
 
 /*Adds functionality to the on/off button*/
