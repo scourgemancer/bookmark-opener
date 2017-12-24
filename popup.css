@@ -133,6 +133,16 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: lightgray;
 }
 
+.folder-checkbox {
+  margin-left: 2%;
+  transform: translateY(25%);
+}
+
+.bookmark-checkbox {
+  margin-left: 2%;
+  transform: translateY(-15%);
+}
+
 .folder-arrow {
   display: inline-block;
   padding: 0;
@@ -152,6 +162,7 @@ input[type=number]::-webkit-outer-spin-button {
   width: 16px;
   height: 16px;
   margin: 0% 2% 0% 0.5%;
+  transform: translateY(25%);
 }
 
 a {
