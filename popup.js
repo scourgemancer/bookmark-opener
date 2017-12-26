@@ -62,7 +62,7 @@ function displayFolder(node, parent) {
   folder.appendChild(folderToggle);
 
   let icon = document.createElement('img');
-  icon.setAttribute('src', 'icon.png');
+  icon.setAttribute('src', 'icon16.png');
   icon.classList.add('icon');
   folder.appendChild(icon);
 
