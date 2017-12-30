@@ -260,7 +260,7 @@ function getBackgroundStates(msg) {
     document.getElementById('numTabs').value = msg.numTabs;
   } else if ('currentlyOpening' in msg) {
     const startSwitch = document.querySelector('#start-button');
-    startSwitch.selected = msg.currentlyOpening;
+    startSwitch.checked = msg.currentlyOpening;
   }
 }
 
