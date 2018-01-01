@@ -5,7 +5,7 @@
 
 var bookmarkQueue = [];
 var openedTabIds = [];
-var numTabs = 4;
+var numTabs = 3;
 var currentlyOpening = false;
 var port;
 
