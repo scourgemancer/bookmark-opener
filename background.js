@@ -100,7 +100,8 @@ function activatedTabListener(tab) {
 /*Starts opening the set number of tabs and listens to activating tabs*/
 function startOpening() {
   for (let i = 0; i < numTabs && getQueuedNum() > 0; i++) {
-    openTab( dequeueTab() );
+    let url = dequeueTab();
+    openTab( url );
   }
   chrome.tabs.onActivated.addListener(activatedTabListener);
   currentlyOpening = true;
